@@ -19,13 +19,13 @@ RUN apt-get update && apt-get install -y build-essential nodejs mysql-client --n
 RUN mkdir -p /web/service
 WORKDIR /web/service
 
-ONBUILD ADD Gemfile /web/service
-ONBUILD ADD Gemfile.lock /web/service
+ONBUILD ADD Gemfile /web/service/
+ONBUILD ADD Gemfile.lock /web/service/
 
 ONBUILD RUN bundle install
 
 EXPOSE 3010
 
-ONBUILD ADD . /web/service
+ONBUILD ADD . /web/service/
 
 CMD ["rails", "server"]% 
