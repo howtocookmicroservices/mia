@@ -13,18 +13,19 @@ RUN touch /root/.ssh/known_hosts
 RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
 RUN apt-get update && apt-get install -y build-essential nodejs mysql-client --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-# throw errors if Gemfile has been modified since Gemfile.lock
-# RUN bundle config --global frozen 1
-
 RUN mkdir -p /web/service
+
+ENV GEM_HOME /web/rubygems/2.0.0-p643
+ENV PATH /web/rubygems/2.0.0-p643/bin:$PATH
+
 WORKDIR /web/service
 
-ONBUILD ADD Gemfile /web/service/
-ONBUILD ADD Gemfile.lock /web/service/
+# ONBUILD ADD Gemfile /web/service/
+# ONBUILD ADD Gemfile.lock /web/service/
 
-ONBUILD RUN bundle install
+# ONBUILD RUN bundle install
 
-EXPOSE 3010
+# EXPOSE 3010
 
 ONBUILD ADD . /web/service/
 
