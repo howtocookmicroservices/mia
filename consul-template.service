@@ -1,7 +1,3 @@
 #!/bin/bash
 
 consul-template -consul=consul:8500 -template "/web/service/templates/mia.yml:/web/service/config/rosi.yml:kill -USR2 $(cat /web/service/tmp/pids/container-unicorn.pid)"
-
-# ps aux | grep 'unicorn master' | grep -v grep | awk '{print $2}' | xargs kill -HUP
-# consul-template -consul=consul:8500 -template "/web/service/templates/mia.yml:/web/service/config/rosi.yml" -dry -once
-# consul-template -consul=consul:8500 -template "/etc/consul-templates/mia.yml:/web/service/config/rosi.yml" -once
