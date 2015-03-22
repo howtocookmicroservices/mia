@@ -1,3 +1,3 @@
 #!/bin/bash
 
-consul-template -consul=consul:8500 -template "/web/service/templates/mia.yml:/web/service/config/rosi.yml:kill -USR2 $(cat /web/service/tmp/pids/container-unicorn.pid)"
+consul-template -consul=consul:8500 -template "/web/service/templates/mia.yml:/web/service/config/rosi.yml:kill -USR2 $(cat /web/service/tmp/pids/unicorn-container.pid)"

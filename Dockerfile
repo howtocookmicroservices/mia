@@ -3,6 +3,8 @@ MAINTAINER Alex Kurkin <akurkin@stelladot.com>
 
 RUN mkdir /root/.ssh/
 
+COPY id_rsa_rosi /root/.ssh/id_rsa
+
 # Create known_hosts
 RUN touch /root/.ssh/known_hosts
 
@@ -14,28 +16,25 @@ RUN apt-get update && apt-get install -y build-essential nodejs mysql-client run
 ENV CT_URL https://github.com/hashicorp/consul-template/releases/download/v0.7.0/consul-template_0.7.0_linux_amd64.tar.gz
 RUN curl -L $CT_URL | tar -C /usr/local/bin --strip-components 1 -zxf -
 
-# Install services
 RUN mkdir -p /etc/service/unicorn
 RUN mkdir -p /etc/service/consul-template
 
-ADD unicorn.service /etc/service/unicorn/run
-ADD consul-template.service /etc/service/consul-template/run
+COPY unicorn.service /etc/service/unicorn/run
+COPY consul-template.service /etc/service/consul-template/run
 
-# Prepare directory for service
-RUN mkdir -p /web/service
-
-# Set ENV variables to install gems into mountable volume
 ENV GEM_HOME /web/rubygems/2.0.0-p643
 ENV BUNDLE_PATH /web/rubygems/2.0.0-p643
 ENV PATH /web/rubygems/2.0.0-p643/bin:$PATH
 
-# Run bundle install
+RUN gem install bundler
+
+RUN mkdir -p /web/service
 WORKDIR /web/service
 
-COPY Gemfile Gemfile
-COPY Gemfile.lock Gemfile.lock
-RUN bundle install
+ONBUILD COPY Gemfile Gemfile
+ONBUILD COPY Gemfile.lock Gemfile.lock
 
-ADD . /web/service/
+ONBUILD VOLUME /web/service 
+#ONBUILD COPY ./ /web/service/
 
-CMD ["rails", "server"]%
+CMD ["runsvdir", "/etc/service"]%
