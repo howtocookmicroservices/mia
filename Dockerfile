@@ -33,8 +33,6 @@ WORKDIR /web/service
 
 ONBUILD COPY Gemfile Gemfile
 ONBUILD COPY Gemfile.lock Gemfile.lock
-
-ONBUILD VOLUME /web/service 
-#ONBUILD COPY ./ /web/service/
+ONBUILD COPY ./ /web/service/
 
 CMD ["runsvdir", "/etc/service"]%
