@@ -18,8 +18,10 @@ RUN curl -L $CT_URL | tar -C /usr/local/bin --strip-components 1 -zxf -
 
 RUN mkdir -p /etc/service/unicorn
 RUN mkdir -p /etc/service/consul-template
+RUN mkdir -p /etc/service/consumers
 
 COPY unicorn.service /etc/service/unicorn/run
+COPY consumers.service /etc/service/consumers/run
 COPY consul-template.service /etc/service/consul-template/run
 
 ENV GEM_HOME /web/rubygems/2.0.0-p643
